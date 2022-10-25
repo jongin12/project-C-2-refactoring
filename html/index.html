@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      #root {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: #292e40;
+      }
+      #text {
+        width: 330px;
+        height: 40px;
+        color: white;
+        font-size: 32px;
+      }
+      form {
+        width: 330px;
+        height: 40px;
+        display: none;
+        justify-content: space-between;
+        align-items: center;
+        transition: 1s;
+      }
+      #name {
+        width: 240px;
+        height: 40px;
+        font-size: 20px;
+      }
+      #button {
+        width: 80px;
+        height: 40px;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <form id="form" onsubmit="return false;">
+        <input
+          type="text"
+          placeholder="summoner name"
+          id="name"
+          onkeyup="enterkey()"
+        />
+        <input
+          id="button"
+          type="button"
+          value="검색"
+          onclick="document.location.href=getvalue()"
+        />
+      </form>
+      <div id="text">League of Legend</div>
+    </div>
+    <script>
+      function enterkey() {
+        if (window.event.keyCode == 13) {
+          document.location.href = getvalue();
+        }
+      }
+      function getvalue() {
+        var text = document.getElementById("name").value;
+        var url = "/summoner/" + text;
+        return url;
+      }
+
+      const root = document.getElementById("root");
+      const form = document.getElementById("form");
+
+      root.addEventListener("click", function () {
+        form.style.display = "flex";
+      });
+    </script>
+  </body>
+</html>

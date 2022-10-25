@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "node-fetch": "^2.6.7"
+  },
+  "type": "module",
+  "name": "project-c2",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jongin12/project-C-2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
