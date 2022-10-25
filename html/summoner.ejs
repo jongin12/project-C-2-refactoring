@@ -4,16 +4,119 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" href="/css/summoner.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+    <title><%=summoner.name%></title>
   </head>
   <body>
-    <div>
-      <p><%=summoner.id%></p>
-      <p><%=summoner.accountId%></p>
-      <p><%=summoner.puuid%></p>
-      <p><%=summoner.name%></p>
-      <p><%=summoner.revisionDate%></p>
-      <p><%=summoner.summonerLevel%></p>
+    <div id="root">
+      <header>
+        <div class="search_box">
+          <form>
+            <input
+              type="text"
+              placeholder="summoner name"
+              id="name"
+              onkeyup="enterkey()"
+            />
+            <input
+              id="button"
+              type="button"
+              value="검색"
+              onclick="document.location.href=getvalue()"
+            />
+          </form>
+        </div>
+      </header>
+      <main>
+        <div id="user_info">
+          <div>
+            <div>
+              <p id="name_text"><%=summoner.name%></p>
+            </div>
+          </div>
+          <div>
+            <form>
+              <div id="nowPlaying">
+                <p>Now Playing</p>
+                <% if(!activeGame.status) {%>
+                <div style="background-color: blue"></div>
+                <% } else { %>
+                <div style="background-color: #ccc"></div>
+                <% } %>
+              </div>
+            </form>
+          </div>
+          <div>
+            <div>
+              <% let solo_win =
+              league.solo.wins/(league.solo.wins+league.solo.losses); let
+              flex_win = league.flex.wins/(league.flex.wins+league.flex.losses);
+              %>
+              <div class="rank" style="z-index: 2; opacity: 1">
+                <p style="font-size: 16px">SOLO RANK</p>
+                <img src="/img/ranked-emblems/<%=league.solo.tier%>.png" />
+                <% if(league.solo.tier === 'UNRANK') { %>
+                <p style="font-size: 16px">
+                  <%=league.solo.tier%> <%=league.solo.rank%>
+                </p>
+                <div>
+                  <p><%=league.solo.wins%> WIN</p>
+                  <p>/</p>
+                  <p><%=league.solo.losses%> LOSS</p>
+                </div>
+                <%} else {%>
+                <p style="font-size: 16px">
+                  <%=league.solo.tier%> <%=league.solo.rank%>
+                  <%=league.solo.leaguePoints%>점
+                </p>
+                <div>
+                  <p><%=league.solo.wins%> WIN</p>
+                  <p>/</p>
+                  <p><%=league.solo.losses%> LOSS</p>
+                </div>
+                <p><%=(solo_win*100).toFixed(1)%>%</p>
+                <%}%>
+              </div>
+              <div class="rank" style="left: 160px; top: 50px; z-index: 1">
+                <p style="font-size: 16px">FREE RANK</p>
+                <img src="/img/ranked-emblems/<%=league.flex.tier%>.png" />
+                <% if(league.flex.tier === 'UNRANK') { %>
+                <p style="font-size: 16px">
+                  <%=league.flex.tier%> <%=league.flex.rank%>
+                </p>
+                <div>
+                  <p><%=league.flex.wins%> WIN</p>
+                  <p>/</p>
+                  <p><%=league.flex.losses%> LOSS</p>
+                </div>
+                <% } else {%>
+                <p style="font-size: 16px">
+                  <%=league.flex.tier%> <%=league.flex.rank%>
+                  <%=league.flex.leaguePoints%>점
+                </p>
+                <div>
+                  <p><%=league.flex.wins%> WIN</p>
+                  <p>/</p>
+                  <p><%=league.flex.losses%> LOSS</p>
+                </div>
+                <p><%=(flex_win*100).toFixed(1)%>%</p>
+                <%}%>
+              </div>
+            </div>
+            <div>
+              <div class="most"></div>
+            </div>
+          </div>
+        </div>
+        <div id="match_list"> </div>
+      </main>
     </div>
   </body>
 </html>

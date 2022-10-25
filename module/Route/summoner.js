@@ -3,7 +3,7 @@ import fs from "fs";
 import ejs from "ejs";
 
 let summonerPage = async function (name, res) {
-  let list = {};
+  let list = { matchData: [] };
   list.summoner = await API.summoners(name);
   if (list.summoner.status) {
     if (list.summoner.status.status_code === 403) {
@@ -12,6 +12,7 @@ let summonerPage = async function (name, res) {
       res.end("없는 소환사명입니다");
     }
   } else {
+    list.activeGame = await API.activeGame(list.summoner.id);
     list.league = await API.summonersLeague(list.summoner.id);
     list.matchList = await API.matchList(list.summoner.puuid);
     for (let i = 0; i < list.matchList.length; i++) {
@@ -25,6 +26,7 @@ let summonerPage = async function (name, res) {
           league: list.league,
           matchList: list.matchList,
           matchData: list.matchData,
+          activeGame: list.activeGame,
         })
       );
     });
