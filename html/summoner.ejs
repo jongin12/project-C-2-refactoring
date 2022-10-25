@@ -203,5 +203,54 @@
       </main>
     </div>
   </body>
-  <script type="text/javascript"></script>
+  <script type="text/javascript">
+    function enterkey(){
+      if(window.event.keyCode == 13){
+        document.location.href=getvalue();
+      }
+    }
+    function getvalue() {
+      var text = document.getElementById("name").value;
+      var url = "/summoner/" + text;
+      return url;
+    }
+
+    const nowPlaying = document.getElementById("nowPlaying");
+    const name = document.getElementById("name_text");
+    nowPlaying.addEventListener("click", function () {
+      var url = "/summoner/" + name.innerText + "/activegame";
+      document.location.href = url;
+    });
+    const rank_card = document.getElementsByClassName("rank");
+    rank_card[0].addEventListener("click", function () {
+      this.style.zIndex = 2;
+      this.style.opacity = 1;
+      rank_card[1].style.zIndex = 1;
+      rank_card[1].style.opacity = 0.5;
+    });
+    rank_card[1].addEventListener("click", function () {
+      this.style.zIndex = 2;
+      this.style.opacity = 1;
+      rank_card[0].style.zIndex = 1;
+      rank_card[0].style.opacity = 0.5;
+    });
+
+    let matchList = JSON.parse("<%- JSON.stringify(arr)%>");
+
+    const game_list = document.getElementById("match_list");
+
+    for(let i=0; i<game_list.children.length;i++){
+      let button = game_list.children[i];
+      button.addEventListener(('click'),()=>{
+        document.location.href = `/match/KR_${matchList[i]}`
+      })
+    }
+
+    if(matchList.length === 0){
+      game_list.textContent = '최근 전적이 없습니다.';
+      game_list.style.fontSize = '2em';
+      game_list.style.justifyContent = 'center';
+      game_list.style.color = 'white';
+    }
+  </script>
 </html>
