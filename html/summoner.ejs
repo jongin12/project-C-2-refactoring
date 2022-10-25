@@ -142,9 +142,60 @@
                   <div><%=matchData[i].kdaText%></div>
                 </div>
               </div>
-              <div class="box_2"></div>
-              <div class="box_3"></div>
-              <div class="box_4"></div>
+              <div class="box_2">
+                <div>
+                  <img src="https://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/<%=myData.championName%>.png"/>
+                  <div>
+                    <img src="<%=matchData[i].rune_KR.icon%>">
+                    <div><%=myData.champLevel%></div>
+                  </div>
+                </div>
+                <div>
+                  <div><p>KILL</p><div><%=myData.kills%></div></div>
+                  <div><p>DEATH</p><div><%=myData.deaths%></div></div>
+                  <div><p>ASSIST</p><div><%=myData.assists%></div></div>
+                </div>
+                <div>
+                  <% if(matchData[i].multikillText !== "") {%>
+                  <div><%=matchData[i].multikillText%></div>
+                  <% } %>
+                </div>
+              </div>
+              <div class="box_3">
+                <div>
+                  <img src="<%=matchData[i].spell_1.img%>">
+                  <img src="<%=matchData[i].spell_2.img%>">
+                </div>
+                <div></div>
+                <div>
+                <% for(let j=0;j<7;j++) { %>
+                  <%if(matchData[i].item_arr[j] !== 0){%>
+                  <img src="http://ddragon.leagueoflegends.com/cdn/12.19.1/img/item/<%=matchData[i].item_arr[j]%>.png" onerror="this.style.display='none'"/>
+                <% }} %>
+                </div>
+              </div>
+              <div class="box_4">
+                <div></div>
+                <div>
+                  <div>
+                    <div>
+                      <p>TOTAL DAMAGE <%=matchData[i].totalDamage%></p>
+                      <p>minute average <%=(matchData[i].Damage_min).toFixed(0)%></p>
+                    </div>
+                    <p><%=matchData[i].teamDamage%>%</p>
+                  </div>
+                  <div>
+                    <div>
+                      <p>CS <%=matchData[i].totalMinion%></p>
+                      <p>minute average <%=(matchData[i].Minion_min).toFixed(1)%></p>
+                    </div>
+                    <div>
+                      <p>GOLD <%=matchData[i].totalGold%></p>
+                      <p></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         <%}%>
@@ -152,4 +203,5 @@
       </main>
     </div>
   </body>
+  <script type="text/javascript"></script>
 </html>

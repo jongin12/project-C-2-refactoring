@@ -2,6 +2,8 @@ import fs from "fs";
 import ejs from "ejs";
 import API from "../../LOL_API.js";
 import queueId from "../queueId.js";
+import runeJson from "../rune.js";
+import spell from "../spell.js";
 
 const stringCheck = (string1, string2) => {
   let small_1 = string1.toLowerCase();
@@ -9,6 +11,32 @@ const stringCheck = (string1, string2) => {
   let small_2 = string2.toLowerCase();
   let noSpace_2 = small_2.split(" ").join("");
   return noSpace_1 === noSpace_2;
+};
+
+const runeFind = (number) => {
+  for (let i = 0; i < runeJson.length; i++) {
+    if (number === runeJson[i].id) {
+      let value = {
+        id: runeJson[i].id,
+        name: runeJson[i].name,
+        icon: "https://ddragon.leagueoflegends.com/cdn/img/" + runeJson[i].icon,
+      };
+      return value;
+    }
+    for (let j = 0; j < runeJson[i].slots.length; j++) {
+      for (let k = 0; k < runeJson[i].slots[j].runes.length; k++) {
+        let arr = runeJson[i].slots[j].runes[k];
+        if (number === arr.id) {
+          let value = {
+            id: arr.id,
+            name: arr.name,
+            icon: "https://ddragon.leagueoflegends.com/cdn/img/" + arr.icon,
+          };
+          return value;
+        }
+      }
+    }
+  }
 };
 
 let summonerPage = async function (name, res) {
@@ -72,6 +100,67 @@ let summonerPage = async function (name, res) {
         list.matchData[i].kdaText = kda.toFixed(2);
       }
       // KDA
+
+      let runeNum = myData.perks.styles[0].selections[0].perk;
+      let rune_KR = runeFind(runeNum);
+      list.matchData[i].rune_KR = rune_KR;
+      // 메인 룬
+
+      let multikill = myData.largestMultiKill;
+      if (multikill === 5) {
+        list.matchData[i].multikillText = "펜타킬";
+      } else if (multikill === 4) {
+        list.matchData[i].multikillText = "쿼드라킬";
+      } else if (multikill === 3) {
+        list.matchData[i].multikillText = "트리플킬";
+      } else if (multikill === 2) {
+        list.matchData[i].multikillText = "더블킬";
+      } else if (multikill <= 1) {
+        list.matchData[i].multikillText = "";
+      }
+      // 멀티킬
+
+      list.matchData[i].spell_1 = spell[myData.summoner1Id];
+      list.matchData[i].spell_2 = spell[myData.summoner2Id];
+      // 스펠
+
+      list.matchData[i].item_arr = [
+        myData.item0,
+        myData.item1,
+        myData.item2,
+        myData.item3,
+        myData.item4,
+        myData.item5,
+        myData.item6,
+      ];
+      // 아이템
+
+      list.matchData[i].totalDamage = myData.totalDamageDealtToChampions;
+      list.matchData[i].Damage_min =
+        (myData.totalDamageDealtToChampions / playtime) * 60;
+      list.matchData[i].totalGold = myData.goldEarned;
+      list.matchData[i].totalMinion = myData.totalMinionsKilled;
+      list.matchData[i].Minion_min =
+        (myData.totalMinionsKilled / playtime) * 60;
+      // 딜량, cs, gold
+
+      let teamDamage = 0;
+      if (myNum < 5) {
+        for (let j = 0; j < 5; j++) {
+          teamDamage +=
+            list.matchData[i].info.participants[j].totalDamageDealtToChampions;
+        }
+        let dmg = myData.totalDamageDealtToChampions / teamDamage;
+        list.matchData[i].teamDamage = (dmg * 100).toFixed(1);
+      } else if (myNum > 4) {
+        for (let j = 5; j < 10; j++) {
+          teamDamage +=
+            list.matchData[i].info.participants[j].totalDamageDealtToChampions;
+        }
+        let dmg = myData.totalDamageDealtToChampions / teamDamage;
+        list.matchData[i].teamDamage = (dmg * 100).toFixed(1);
+      }
+      // 팀의 딜량 지분
     }
 
     // const json = JSON.stringify(list);
