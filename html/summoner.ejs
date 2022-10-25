@@ -115,7 +115,40 @@
             </div>
           </div>
         </div>
-        <div id="match_list"> </div>
+        <div id="match_list">
+        <% for(let i=0;i<matchData.length;i++) { %>
+          <% let myData = matchData[i].info.participants[matchData[i].myNum]; %>
+          <% if(myData.win) {%>
+          <section class="game_box win">
+          <% } else if (!myData.win){ %>
+          <section class="game_box lose">
+          <% } %>
+            <div>
+              <div class="box_1">
+                <div>
+                  <div><%=matchData[i].queueId_KR%></div>
+                </div>
+                <div>
+                  <div>
+                    <div><div></div></div>
+                    <div>
+                      <p><%=matchData[i].myTime%></p>
+                      <p><%=matchData[i].myGameDuration%></p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p>KDA</p>
+                  <div><%=matchData[i].kdaText%></div>
+                </div>
+              </div>
+              <div class="box_2"></div>
+              <div class="box_3"></div>
+              <div class="box_4"></div>
+            </div>
+          </section>
+        <%}%>
+        </div>
       </main>
     </div>
   </body>
