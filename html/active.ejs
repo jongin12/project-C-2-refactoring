@@ -38,15 +38,28 @@
             <div><img src="<%=myData.sub_rune.icon%>" /></div>
           </div>
           <div>
-            <img src="" alt="" />
+            <img src="<%=myData.champ_img%>" />
           </div>
         </div>
-        <% } %> <% for(let i=0; i<5; i++) { %>
+        <% } %> <% for(let i=5; i<10; i++) { %> <% let myData =
+        activeGame.participants[i]; let myLeague = league[i]; %>
         <div class="user_right">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
+          <div>
+            <img src="<%=myData.champ_img%>" />
+          </div>
+          <div>
+            <div><img src="<%=myData.main_rune.icon%>" /></div>
+            <div><img src="<%=myData.sub_rune.icon%>" /></div>
+          </div>
+          <div>
+            <img src="<%=myData.spell1_KR.img%>" />
+            <img src="<%=myData.spell2_KR.img%>" />
+          </div>
+          <div>
+            <p><%=myData.summonerName%></p>
+            <p><%=myLeague.solo.tier%> <%=myLeague.solo.rank%></p>
+            <p><%=myLeague.win_text%></p>
+          </div>
         </div>
         <% } %>
       </main>

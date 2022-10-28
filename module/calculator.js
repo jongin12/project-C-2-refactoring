@@ -11,6 +11,13 @@ const calc = {
     let noSpace_2 = small_2.split(" ").join("");
     return noSpace_1 === noSpace_2;
   }, // 문자열 2개 대소문자, 공백 제외 같은 값인지 체크 후 bool 반환
+  championFind: (number) => {
+    for (let champ in champion.data) {
+      if (Number(champion.data[champ].key) === number) {
+        return `https://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/${champion.data[champ].image.full}`;
+      }
+    }
+  }, // 챔피언id 입력시 챔피언 데이터 반환
   runeFind: (number) => {
     for (let i = 0; i < runeJson.length; i++) {
       if (number === runeJson[i].id) {

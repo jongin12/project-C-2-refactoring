@@ -44,6 +44,7 @@ let activePage = async function (name, res) {
       for (let i = 0; i < 10; i++) {
         let user = list.activeGame.participants[i];
 
+        user.champ_img = calc.championFind(user.championId);
         //챔피언 img
 
         user.main_rune = calc.runeFind(user.perks.perkIds[0]);
