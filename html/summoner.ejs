@@ -203,7 +203,14 @@
       </main>
     </div>
   </body>
+  <%
+  let arr = matchList.map((item)=>{
+    var a = item.slice(3);
+    return Number(a);
+  })
+  %>
   <script type="text/javascript">
+    
     function enterkey(){
       if(window.event.keyCode == 13){
         document.location.href=getvalue();
@@ -218,9 +225,10 @@
     const nowPlaying = document.getElementById("nowPlaying");
     const name = document.getElementById("name_text");
     nowPlaying.addEventListener("click", function () {
-      var url = "/summoner/" + name.innerText + "/activegame";
+      var url = "/active/" + name.innerText;
       document.location.href = url;
     });
+
     const rank_card = document.getElementsByClassName("rank");
     rank_card[0].addEventListener("click", function () {
       this.style.zIndex = 2;

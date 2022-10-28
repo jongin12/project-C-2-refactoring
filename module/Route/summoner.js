@@ -1,51 +1,18 @@
 import fs from "fs";
 import ejs from "ejs";
 import API from "../../LOL_API.js";
-import queueId from "../queueId.js";
-import runeJson from "../rune.js";
 import spell from "../spell.js";
-
-const stringCheck = (string1, string2) => {
-  let small_1 = string1.toLowerCase();
-  let noSpace_1 = small_1.split(" ").join("");
-  let small_2 = string2.toLowerCase();
-  let noSpace_2 = small_2.split(" ").join("");
-  return noSpace_1 === noSpace_2;
-};
-
-const runeFind = (number) => {
-  for (let i = 0; i < runeJson.length; i++) {
-    if (number === runeJson[i].id) {
-      let value = {
-        id: runeJson[i].id,
-        name: runeJson[i].name,
-        icon: "https://ddragon.leagueoflegends.com/cdn/img/" + runeJson[i].icon,
-      };
-      return value;
-    }
-    for (let j = 0; j < runeJson[i].slots.length; j++) {
-      for (let k = 0; k < runeJson[i].slots[j].runes.length; k++) {
-        let arr = runeJson[i].slots[j].runes[k];
-        if (number === arr.id) {
-          let value = {
-            id: arr.id,
-            name: arr.name,
-            icon: "https://ddragon.leagueoflegends.com/cdn/img/" + arr.icon,
-          };
-          return value;
-        }
-      }
-    }
-  }
-};
+import calc from "../calculator.js";
 
 let summonerPage = async function (name, res) {
   let list = { matchData: [] };
   list.summoner = await API.summoners(name);
   if (list.summoner.status) {
     if (list.summoner.status.status_code === 403) {
+      res.writeHead(200, { "Content-Type": "text/html;charset=UTF-8" });
       res.end("Riot Key error");
     } else if (list.summoner.status.status_code === 404) {
+      res.writeHead(200, { "Content-Type": "text/html;charset=UTF-8" });
       res.end("없는 소환사명입니다");
     }
   } else {
@@ -56,7 +23,7 @@ let summonerPage = async function (name, res) {
       list.matchData[i] = await API.matchInfo(list.matchList[i]);
       for (let j = 0; j < 10; j++) {
         let summonerName = list.matchData[i].info.participants[j].summonerName;
-        if (stringCheck(summonerName, list.summoner.name)) {
+        if (calc.stringCheck(summonerName, list.summoner.name)) {
           list.matchData[i].myNum = j;
         }
       }
@@ -88,10 +55,9 @@ let summonerPage = async function (name, res) {
       list.matchData[i].myGameDuration = `${min}분 ${sec}초`;
       // 플레이시간
 
-      let queueNum = list.matchData[i].info.queueId;
-      let queueId_KR = queueId[queueNum];
-      list.matchData[i].queueId_KR = queueId_KR;
-      // 게임 모드
+      list.matchData[i].queueId_KR = calc.queueId(
+        list.matchData[i].info.queueId
+      ); //게임 모드
 
       if (myData.deaths === 0) {
         list.matchData[i].kdaText = "perfect";
@@ -101,23 +67,11 @@ let summonerPage = async function (name, res) {
       }
       // KDA
 
-      let runeNum = myData.perks.styles[0].selections[0].perk;
-      let rune_KR = runeFind(runeNum);
+      let rune_KR = calc.runeFind(myData.perks.styles[0].selections[0].perk);
       list.matchData[i].rune_KR = rune_KR;
       // 메인 룬
 
-      let multikill = myData.largestMultiKill;
-      if (multikill === 5) {
-        list.matchData[i].multikillText = "펜타킬";
-      } else if (multikill === 4) {
-        list.matchData[i].multikillText = "쿼드라킬";
-      } else if (multikill === 3) {
-        list.matchData[i].multikillText = "트리플킬";
-      } else if (multikill === 2) {
-        list.matchData[i].multikillText = "더블킬";
-      } else if (multikill <= 1) {
-        list.matchData[i].multikillText = "";
-      }
+      list.matchData[i].multikillText = calc.multiKill(myData.largestMultiKill);
       // 멀티킬
 
       list.matchData[i].spell_1 = spell[myData.summoner1Id];

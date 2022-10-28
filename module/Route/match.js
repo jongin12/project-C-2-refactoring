@@ -7,8 +7,10 @@ let matchPage = async function (matchId, res) {
   list.match = await API.matchInfo(matchId);
   if (list.match.status) {
     if (list.match.status.status_code === 403) {
+      res.writeHead(200, { "Content-Type": "text/html;charset=UTF-8" });
       res.end("Riot Key error");
     } else if (list.match.status.status_code === 404) {
+      res.writeHead(200, { "Content-Type": "text/html;charset=UTF-8" });
       res.end("없는 match ID입니다");
     }
   } else {

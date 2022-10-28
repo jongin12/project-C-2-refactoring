@@ -4,14 +4,73 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" href="/css/active.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+    <title>activeGame</title>
   </head>
   <body>
-    <div>
-      <p><%=summoner.id%></p>
-      <p><%=activeGame.gameId%></p>
-      <p><%=activeGame.mapId%></p>
-      <p><%=activeGame.gameLength%></p>
+    <div id="root">
+      <header>
+        <p><%=activeGame.queueId_KR%></p>
+        <p id="time"></p>
+      </header>
+      <main>
+        <% for(let i=0; i<5; i++) { %> <% let myData =
+        activeGame.participants[i]; let myLeague = league[i]; %>
+        <div class="user_left">
+          <div>
+            <p><%=myData.summonerName%></p>
+            <p><%=myLeague.solo.tier%> <%=myLeague.solo.rank%></p>
+            <p><%=myLeague.win_text%></p>
+          </div>
+          <div>
+            <img src="<%=myData.spell1_KR.img%>" />
+            <img src="<%=myData.spell2_KR.img%>" />
+          </div>
+          <div>
+            <div><img src="<%=myData.main_rune.icon%>" /></div>
+            <div><img src="<%=myData.sub_rune.icon%>" /></div>
+          </div>
+          <div>
+            <img src="" alt="" />
+          </div>
+        </div>
+        <% } %> <% for(let i=0; i<5; i++) { %>
+        <div class="user_right">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <% } %>
+      </main>
     </div>
   </body>
+  <script>
+    const time = document.getElementById("time");
+    let now = Number("<%=activeGame.gameLength%>");
+
+    if (now < 0) {
+      time.innerText = "loading..";
+    } else {
+      let min = Math.floor(now / 60);
+      let sec = now % 60;
+      let timeset = `${min}분 ${sec}초`;
+      time.innerText = timeset;
+
+      setInterval(() => {
+        now++;
+        let min = Math.floor(now / 60);
+        let sec = now % 60;
+        let timeset = `${min}분 ${sec}초`;
+        time.innerText = timeset;
+      }, 1000);
+    }
+  </script>
 </html>
